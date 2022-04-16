@@ -1,0 +1,5 @@
+//vs code config
+.vscode
+
+// exe files
+*.exe
