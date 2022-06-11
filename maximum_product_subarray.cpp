@@ -11,7 +11,7 @@ public:
     long long maxProduct(vector<int> arr, int n)
     {
         // code here
-        long long maxProduct = INT_MIN, p1 = 1, p2 = 1, p3 = 1;
+        long long maxProduct = INT_MIN, p1 = 1, p2 = 1;
         for (int i = 0; i < n; i++)
         {
             p1 *= arr[i];
@@ -21,7 +21,7 @@ public:
             if (arr[i] < 0 && p1 < 0 && p2 < 0)
                 p2 = 1;
             if (arr[i] == 0)
-                p1 = p2 = p3 = 1;
+                p1 = p2 = 1;
         }
         return maxProduct;
     }
