@@ -13,31 +13,16 @@ public:
     int celebrity(vector<vector<int>> &M, int n)
     {
         // code here
-        bool isZeroCelebrity = true;
+        int celebrity = 0;
+        for (int i = 1; i < n; i++)
+            if (!M[i][celebrity])
+                celebrity = i;
         for (int i = 0; i < n; i++)
-        {
-            if (M[0][i] == 1 && M[i][0] == 0)
-            {
-                isZeroCelebrity = false;
-                bool isCelebrity = true;
-                for (int j = 0; j < n; j++)
-                {
-                    if (M[i][j] == 1)
-                    {
-                        isCelebrity = false;
-                        break;
-                    }
-                }
-                if (isCelebrity)
-                    return i;
-            }
-            if (i != 0 && M[i][0] == 0)
-                isZeroCelebrity = false;
-        }
-
-        if (isZeroCelebrity)
-            return 0;
-        return -1;
+            if (celebrity == i)
+                continue;
+            else if (M[celebrity][i] || !M[i][celebrity])
+                return -1;
+        return celebrity;
     }
 };
 
