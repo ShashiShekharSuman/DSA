@@ -106,28 +106,22 @@ TreeNode *buildTree(string str)
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-
 class Solution
 {
-    int countGoodNodes(TreeNode *root, int mx)
-    {
-        if (!root)
-            return 0;
-        return countGoodNodes(root->left, max(mx, root->val)) +
-               countGoodNodes(root->right, max(mx, root->val)) +
-               (root->val < mx ? 0 : 1);
-    }
-
 public:
-    int goodNodes(TreeNode *root)
+    bool evaluateTree(TreeNode *root)
     {
-        if (!root)
-            return 0;
-        return countGoodNodes(root, root->val);
+        if (!root->left && !root->right)
+            return root->val;
+        bool left = evaluateTree(root->left),
+             right = evaluateTree(root->right);
+        if (root->val == 2)
+            return left || right;
+        else
+            return left && right;
     }
 };
 
-// { Driver Code Starts.
 int main()
 {
 
@@ -143,9 +137,8 @@ int main()
 
         TreeNode *root = buildTree(str);
         Solution obj;
-        cout << obj.goodNodes(root) << "\n";
+        cout << obj.evaluateTree(root) << "\n";
     }
 
     return 0;
 }
-// } Driver Code Ends

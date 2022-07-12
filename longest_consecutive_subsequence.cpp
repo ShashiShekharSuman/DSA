@@ -5,40 +5,29 @@ using namespace std;
 class Solution
 {
 public:
+    /*
+    Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
+    You must write an algorithm that runs in O(n) time.
+    */
+
     // arr[] : the input array
     // N : size of the array arr[]
-
-    // Function to return length of longest subsequence of consecutive integers.
     int findLongestConseqSubseq(int arr[], int N)
     {
         // Your code here
-        int lcs = 0;
-        unordered_map<int, int> um1, um2;
-        for (int i = 0; i < N; i++)
-            um1[arr[i]] = i + 1;
+        int maxLen = 0;
+        unordered_set<int> s(arr, arr + N);
         for (int i = 0; i < N; i++)
         {
-            int j = arr[i];
-            if (!um2[j])
+            if (s.find(arr[i] - 1) == s.end())
             {
-                int count = 0;
-                while (um1[j])
-                {
-                    if (um2[j])
-                    {
-                        count += um2[j];
-                        break;
-                    }
-                    um2[j]++;
-                    count++;
+                int j = 0;
+                while (s.find(j + arr[i]) != s.end())
                     j++;
-                }
-                um2[arr[i]] = count;
-                if (count > lcs)
-                    lcs = count;
+                maxLen = max(j, maxLen);
             }
         }
-        return lcs;
+        return maxLen;
     }
 };
 

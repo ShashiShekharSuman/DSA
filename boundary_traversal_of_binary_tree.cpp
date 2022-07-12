@@ -1,77 +1,181 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define MAX_HEIGHT 100000
+
+// Tree Node
+struct Node
+{
+    int data;
+    Node *left;
+    Node *right;
+};
+
+// Utility function to create a new Tree Node
+Node *newNode(int val)
+{
+    Node *temp = new Node;
+    temp->data = val;
+    temp->left = NULL;
+    temp->right = NULL;
+
+    return temp;
+}
+
+// Function to Build Tree
+Node *buildTree(string str)
+{
+    // Corner Case
+    if (str.length() == 0 || str[0] == 'N')
+        return NULL;
+
+    // Creating vector of strings from input
+    // string after spliting by space
+    vector<string> ip;
+
+    istringstream iss(str);
+    for (string str; iss >> str;)
+        ip.push_back(str);
+
+    // Create the root of the tree
+    Node *root = newNode(stoi(ip[0]));
+
+    // Push the root to the queue
+    queue<Node *> queue;
+    queue.push(root);
+
+    // Starting from the second element
+    int i = 1;
+    while (!queue.empty() && i < ip.size())
+    {
+
+        // Get and remove the front of the queue
+        Node *currNode = queue.front();
+        queue.pop();
+
+        // Get the current node's value from the string
+        string currVal = ip[i];
+
+        // If the left child is not null
+        if (currVal != "N")
+        {
+
+            // Create the left child for the current node
+            currNode->left = newNode(stoi(currVal));
+
+            // Push it to the queue
+            queue.push(currNode->left);
+        }
+
+        // For the right child
+        i++;
+        if (i >= ip.size())
+            break;
+        currVal = ip[i];
+
+        // If the right child is not null
+        if (currVal != "N")
+        {
+
+            // Create the right child for the current node
+            currNode->right = newNode(stoi(currVal));
+
+            // Push it to the queue
+            queue.push(currNode->right);
+        }
+        i++;
+    }
+
+    return root;
+}
 
 // } Driver Code Ends
+/* A binary tree Node
+struct Node
+{
+    int data;
+    Node* left, * right;
+}; */
+
 class Solution
 {
-public:
-    // arr[]: Input Array
-    // N : Size of the Array arr[]
-    // Function to count inversions in the array.
-
-    long long inversion_Count = 0;
-    void merge(long long arr[], int s, int m, int e)
+    void leftBoundaryTraversal(Node *root, vector<int> &boundaryTraversal)
     {
-        long long result[e - s];
-        int i = s, k = m, j = 0;
-        while (i < m && k < e)
-        {
-            if (arr[i] <= arr[k])
-                result[j++] = arr[i++];
-            else
-            {
-                inversion_Count += m - i;
-                result[j++] = arr[k++];
-            }
-        }
-        while (i < m)
-            result[j++] = arr[i++];
-        while (k < e)
-            result[j++] = arr[k++];
-        for (int p = 0; p < e - s; p++)
-            arr[s + p] = result[p];
-    }
-
-    void mergeSort(long long arr[], int start, int end)
-    {
-        int n = end - start, mid = n - n / 2;
-        if (n == 1)
+        if (!root || (!root->left && !root->right))
             return;
-        mergeSort(arr, start, start + mid);
-        mergeSort(arr, start + mid, end);
-        merge(arr, start, start + mid, end);
+        boundaryTraversal.push_back(root->data);
+        leftBoundaryTraversal(root->left, boundaryTraversal);
+        if (!root->left)
+            leftBoundaryTraversal(root->right, boundaryTraversal);
     }
 
-    long long int inversionCount(long long arr[], long long N)
+    void leafTraversal(Node *root, vector<int> &boundaryTraversal)
     {
-        // Your Code Here
-        mergeSort(arr, 0, N);
-        return inversion_Count;
+        if (!root->left && !root->right)
+        {
+            boundaryTraversal.push_back(root->data);
+            return;
+        }
+        if (root->left)
+            leafTraversal(root->left, boundaryTraversal);
+        if (root->right)
+            leafTraversal(root->right, boundaryTraversal);
+    }
+
+    void reverseRightBoundaryTraversal(Node *root, vector<int> &boundaryTraversal)
+    {
+        if (!root || (!root->left && !root->right))
+            return;
+        reverseRightBoundaryTraversal(root->right, boundaryTraversal);
+        if (!root->right)
+            reverseRightBoundaryTraversal(root->left, boundaryTraversal);
+        boundaryTraversal.push_back(root->data);
+    }
+
+public:
+    /*
+    Given a Binary Tree, find its Boundary Traversal. The traversal should be in the following order:
+
+        > Left boundary nodes: defined as the path from the root to the left-most node ie- the leaf node you could reach when you always travel preferring the left subtree over the right subtree.
+        > Leaf nodes: All the leaf nodes except for the ones that are part of left or right boundary.
+        > Reverse right boundary nodes: defined as the path from the right-most node to the root. The right-most node is the leaf node you could reach when you always travel preferring the right subtree over the left subtree. Exclude the root from this as it was already included in the traversal of left boundary nodes.
+
+    Note: If the root doesn't have a left subtree or right subtree, then the root itself is the left or right boundary.
+    */
+    vector<int> boundary(Node *root)
+    {
+        // Your code here
+        if (!root)
+            return {};
+        vector<int> boundaryTraversal;
+        boundaryTraversal.push_back(root->data);
+        leftBoundaryTraversal(root->left, boundaryTraversal);
+        if (root->left || root->right)
+            leafTraversal(root, boundaryTraversal);
+        reverseRightBoundaryTraversal(root->right, boundaryTraversal);
+        return boundaryTraversal;
     }
 };
 
 // { Driver Code Starts.
 
+/* Driver program to test size function*/
+
 int main()
 {
-
-    long long T;
-    cin >> T;
-
-    while (T--)
+    int t;
+    string tc;
+    getline(cin, tc);
+    t = stoi(tc);
+    while (t--)
     {
-        long long N;
-        cin >> N;
-
-        long long A[N];
-        for (long long i = 0; i < N; i++)
-        {
-            cin >> A[i];
-        }
-        Solution obj;
-        cout << obj.inversionCount(A, N) << endl;
+        string s, ch;
+        getline(cin, s);
+        Node *root = buildTree(s);
+        Solution ob;
+        vector<int> res = ob.boundary(root);
+        for (int i : res)
+            cout << i << " ";
+        cout << endl;
     }
-
     return 0;
-}
-// } Driver Code Ends
+} // } Driver Code Ends

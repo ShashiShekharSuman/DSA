@@ -6,10 +6,15 @@ using namespace std;
 class Solution
 {
 public:
-    /*The function takes an array of heights, width and
-    length as its 3 arguments where each index i value
-    determines the height, width, length of the ith box.
-    Here n is the total no of boxes.*/
+    /*
+    You are given a set of N types of rectangular 3-D boxes, where the ith box has height h, width w and length l. You task is to create a stack of boxes which is as tall as possible, but you can only stack a box on top of another box if the dimensions of the 2-D base of the lower box are each strictly larger than those of the 2-D base of the higher box. Of course, you can rotate a box so that any side functions as its base.It is also allowable to use multiple instances of the same type of box. You task is to complete the function maxHeight which returns the height of the highest possible stack so formed.
+
+    Note: Base of the lower box should be strictly larger than that of the new box we're going to place. This is in terms of both length and width, not just in terms of area. So, two boxes with same base cannot be placed one over the other.
+    */
+
+    /*
+    The function takes an array of heights, width and length as its 3 arguments where each index i value determines the height, width, length of the ith box. Here n is the total no of boxes.
+    */
     int maxHeight(int height[], int width[], int length[], int n)
     {
         // Your code here
