@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 string firstRepChar(string s);
 int main()
 {

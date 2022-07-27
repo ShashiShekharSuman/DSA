@@ -19,6 +19,8 @@ public:
             int node = pq.top().second,
                 d = pq.top().first;
             pq.pop();
+            if (distance[node] < d)
+                continue;
             for (auto i : adj[node])
                 if (distance[i[0]] > d + i[1])
                 {
